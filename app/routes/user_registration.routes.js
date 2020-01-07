@@ -5,6 +5,7 @@ module.exports = (app) => {
     app.post('/user/registration', user_form.create);
 
     app.post('/user/login', user_form.login);
+    app.post('/user/facebook/login',user_form.facebook_login);
 }
 
 

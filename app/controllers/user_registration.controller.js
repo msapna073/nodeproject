@@ -4,13 +4,7 @@ const bcrypt = require('bcrypt');
 // Create and Save a new user
 exports.create = async(req, res) => {
 
-    
-
-
-    
-    // Create a user_registration_form
-    
-
+     // Create a user_registration_form
     let email_id = await user_registration_form.findOne({ email: req.body.email });
     if (email_id) {
         //return res.status(403).send('email already exisits!');
@@ -20,7 +14,6 @@ exports.create = async(req, res) => {
         })
     } 
 
-    
     else {
         // Insert the new user if they do not exist yet
      const user  = new user_registration_form({
@@ -28,6 +21,7 @@ exports.create = async(req, res) => {
         last_name:req.body.last_name,
         password:req.body.password,
         email: req.body.email,
+        userid:req.body.userid,
         phone_number: req.body.phone_number,
         date_of_birth: req.body.date_of_birth,
         society_name:req.body.society_name,
@@ -46,12 +40,7 @@ exports.create = async(req, res) => {
         latitude:req.body.latitude,
         longitude:req.body.longitude
             
-        });
-
-
-
-        
-        
+        });        
             const salt = await bcrypt.genSalt(10);
         user.password = await bcrypt.hash(user.password, salt);
         var result=await user.save();
@@ -74,27 +63,10 @@ exports.create = async(req, res) => {
   
 
 
-
-
-
-
-
-
-
-
-
-    /* console.log(Registration_Form)
-    // Save Note in the database
-    Registration_Form.save()
-    .then(data => {
-        console.log("Insert record sucessfully")
-        res.send(data);
-    }).catch(err => {
-        res.status(500).send({
-            message: err.message || "Some error occurred while creating the Note."
-        });
-    }); */
 };
+
+
+
 
 exports.login = async (req, res) => {
     console.log(req.body.username)
@@ -121,6 +93,9 @@ exports.login = async (req, res) => {
 
 
             } 
+            
+
+            
           });
 
     }
@@ -134,6 +109,27 @@ exports.login = async (req, res) => {
 
     }
     
+};
+exports.facebook_login = async (req, res) => {
+    let fb_user = await user_registration_form.findOne({ email: req.body.userid });
+    if (fb_user) {
+        res.status(200).json({
+            status: 200,
+            message: 'Logged in with Facbook....'
+        })
+        
+    }
+    else{
+
+        res.status(404).json({
+            status: 404,
+            message: 'Userid not found'
+        })
+        //return res.status(404).send('user not found..');
+
+    }
+
+
 };
 
 
